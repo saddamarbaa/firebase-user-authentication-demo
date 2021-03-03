@@ -1,36 +1,57 @@
 import React, { useState } from "react";
 
-const App = () => {
-  const [userName, setuserName] = useState("");
-  const [userPassword, setuserPassword] = useState("");
+import auth from "./Firebase";
 
-  const Login = () => {
-    console.log("Your are login in");
+const App = () => {
+  const [email, setuserEmail] = useState("");
+  const [password, setuserpassword] = useState("");
+  const [user, setuser] = useState(null);
+
+  const Login = (e) => {
+    e.preventDefault();
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log(user);
+        console.log("Your are login in");
+      })
+      .catch((error) => {
+        console.log("Fetch Error :-S", error);
+      });
   };
 
-  const Resgister = () => {
-    console.log("Resgister");
+  const Resgister = (e) => {
+    e.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((respone) => {
+        console.log(respone);
+        console.log("Resgister");
+      })
+      .catch((error) => {
+        console.log("Fetch Error :-S", error);
+      });
   };
 
   return (
     <div className="app">
       <h2>My Login System</h2>
-      <form action="#">
-        <label for="name">user Name:</label>
+      <form>
+        <label>user Name:</label>
         <input
-          value={userName}
+          value={email}
           type="text"
           placeholder="Enter Your Name"
           required
-          onChange={(e) => setuserName(e.target.value)}
+          onChange={(e) => setuserEmail(e.target.value)}
         />
         <br />
-        <label for="Email:">user Email:</label>
+        <label>Email:</label>
         <input
-          value={userPassword}
+          value={password}
           type="password"
           placeholder="Enter Your Password"
-          onChange={(e) => setuserPassword(e.target.value)}
+          onChange={(e) => setuserpassword(e.target.value)}
         />
         <br />
         <button type="submit" onClick={Login}>
